@@ -1,0 +1,665 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloomCare | Medicine Expiry Reminder</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f8f5ef;
+            color: #30243a;
+        }
+
+        .navbar {
+            background: #30243a;
+            color: #fff8ee;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .brand span {
+            color: #f2b49b;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #f8eadd;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #f2b49b;
+        }
+
+        .page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 35px 24px 50px;
+        }
+
+        .hero {
+            background: #e8e5ed;
+            border-radius: 24px;
+            padding: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            color: #796783;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(30px, 4vw, 43px);
+            line-height: 1.15;
+            margin: 12px 0;
+            max-width: 600px;
+        }
+
+        .hero p {
+            color: #665a68;
+            line-height: 1.7;
+            max-width: 530px;
+            margin-bottom: 0;
+        }
+
+        .hero-badge {
+            background: #fff8ee;
+            border: 1px solid #e6d8ca;
+            border-radius: 18px;
+            padding: 22px;
+            min-width: 180px;
+        }
+
+        .hero-badge .symbol {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .hero-badge strong {
+            display: block;
+            font-size: 16px;
+        }
+
+        .hero-badge small {
+            display: block;
+            color: #796783;
+            margin-top: 6px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 32px 0 16px;
+        }
+
+        .section-heading h2 {
+            font-size: 23px;
+            margin: 0 0 5px;
+        }
+
+        .section-heading p {
+            color: #796f79;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: #fffdf9;
+            padding: 22px;
+            border: 1px solid #eee5dc;
+            border-radius: 18px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #796f79;
+        }
+
+        .stat-number {
+            font-size: 31px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .stat-card.total {
+            border-top: 4px solid #796783;
+        }
+
+        .stat-card.expired {
+            border-top: 4px solid #bd6259;
+        }
+
+        .stat-card.soon {
+            border-top: 4px solid #d99b4e;
+        }
+
+        .stat-card.safe {
+            border-top: 4px solid #759578;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 0.85fr 1.5fr;
+            gap: 22px;
+            align-items: start;
+            margin-top: 28px;
+        }
+
+        .panel {
+            background: #fffdf9;
+            border: 1px solid #eee5dc;
+            border-radius: 20px;
+            padding: 25px;
+            min-width: 0;
+        }
+
+        .panel h2 {
+            font-size: 21px;
+            margin: 0 0 7px;
+        }
+
+        .panel-description {
+            font-size: 13px;
+            color: #796f79;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 19px;
+            border: 1px solid #ded4df;
+            border-radius: 10px;
+            background: #fffaf5;
+            color: #30243a;
+            font: inherit;
+        }
+
+        input:focus,
+        select:focus {
+            outline: 2px solid #b9cbb8;
+            border-color: #759578;
+        }
+
+        button {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            padding: 13px 16px;
+            background: #30243a;
+            color: #fff8ee;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #51405d;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        th {
+            background: #f0eaf0;
+            color: #594761;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        th, td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #eee5dc;
+        }
+
+        tbody tr:hover {
+            background: #fff8f0;
+        }
+
+        .medicine-name {
+            font-weight: 600;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .expired-status {
+            background: #f8e2df;
+            color: #9d3932;
+        }
+
+        .soon-status {
+            background: #fff0d9;
+            color: #94601d;
+        }
+
+        .safe-status {
+            background: #e2eee1;
+            color: #426c48;
+        }
+
+        .stock-number {
+            font-weight: bold;
+            color: #51405d;
+        }
+
+        .delete-form {
+            margin: 0;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .edit-button {
+            display: inline-block;
+            vertical-align: middle;
+            padding: 7px 10px;
+            margin-right: 5px;
+            border-radius: 8px;
+            background: #e8e5ed;
+            color: #51405d;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .edit-button:hover {
+            background: #d9d1e0;
+        }
+
+        .delete-button {
+            width: auto;
+            padding: 7px 10px;
+            background: #f8e2df;
+            color: #9d3932;
+            font-size: 12px;
+        }
+
+        .delete-button:hover {
+            background: #edc9c4;
+        }
+
+        .empty-state {
+            padding: 35px 10px;
+            text-align: center;
+            color: #796f79;
+            line-height: 1.7;
+        }
+
+        .empty-state strong {
+            display: block;
+            color: #30243a;
+            font-size: 16px;
+        }
+
+        .note {
+            margin-top: 24px;
+            padding: 17px 20px;
+            background: #e6eee3;
+            color: #425b45;
+            border-radius: 14px;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .urgent-badge {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 4px 8px;
+            background: #fff0e6;
+            color: #c2410c;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #796f79;
+            font-size: 12px;
+        }
+
+        @media (max-width: 850px) {
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .navbar {
+                padding: 18px 22px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .page {
+                padding: 22px 14px 35px;
+            }
+
+            .hero {
+                padding: 25px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+
+            th, td {
+                padding: 11px 9px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="brand">Bloom<span>Care.</span></div>
+
+        <nav class="nav-links">
+            <a href="#overview">Overview</a>
+            <a href="#add-medicine">Add Medicine</a>
+            <a href="#medicine-list">Medicine Cabinet</a>
+            <a href="/stock">Stock Management</a>
+        </nav>
+    </header>
+
+    <main class="page">
+
+        <section class="hero" id="overview">
+            <div>
+                <div class="eyebrow">Your personal medicine tracker</div>
+                <h1>A little care goes a long way.</h1>
+                <p>
+                    Keep your medicine cabinet organised.
+                    Track expiry dates, spot medicines that need attention,
+                    and keep your records in one place.
+                </p>
+            </div>
+
+            <div class="hero-badge">
+                <div class="symbol">✿</div>
+                <strong>Carefully organised</strong>
+                <small>Your medicines, in one place.</small>
+            </div>
+        </section>
+
+        {% set ns = namespace(expired=0, soon=0, safe=0) %}
+
+        {% for medicine in medicines %}
+            {% if medicine.status == "Expired" %}
+                {% set ns.expired = ns.expired + 1 %}
+            {% elif medicine.status == "Expiring Soon" %}
+                {% set ns.soon = ns.soon + 1 %}
+            {% else %}
+                {% set ns.safe = ns.safe + 1 %}
+            {% endif %}
+        {% endfor %}
+
+        <section>
+            <div class="section-heading">
+                <div>
+                    <h2>Your overview</h2>
+                    <p>A quick look at your medicine records.</p>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card total">
+                    <div class="stat-label">Total medicines</div>
+                    <div class="stat-number">{{ medicines|length }}</div>
+                </div>
+
+                <div class="stat-card expired">
+                    <div class="stat-label">Expired</div>
+                    <div class="stat-number">{{ ns.expired }}</div>
+                </div>
+
+                <div class="stat-card soon">
+                    <div class="stat-label">Expiring soon</div>
+                    <div class="stat-number">{{ ns.soon }}</div>
+                </div>
+
+                <div class="stat-card safe">
+                    <div class="stat-label">Not expired</div>
+                    <div class="stat-number">{{ ns.safe }}</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="main-grid">
+
+            <div class="panel" id="add-medicine">
+                <h2>Add a medicine</h2>
+                <p class="panel-description">
+                    Enter the medicine details below to add a new record.
+                </p>
+
+                <form action="/add" method="POST">
+                    <label for="medicine_name">Medicine name</label>
+                    <input
+                        type="text"
+                        id="medicine_name"
+                        name="medicine_name"
+                        placeholder="e.g. Paracetamol"
+                        required
+                    >
+
+                    <label for="expiry_date">Expiry date</label>
+                    <input
+                        type="date"
+                        id="expiry_date"
+                        name="expiry_date"
+                        required
+                    >
+
+                    <button type="submit">+ Add to my cabinet</button>
+                </form>
+            </div>
+
+            <div class="panel" id="medicine-list">
+                <h2>Medicine cabinet</h2>
+                <p class="panel-description">
+                    Review your saved medicines, stock quantities, and expiry status.
+                </p>
+
+                <input
+                    type="text"
+                    id="medicineSearch"
+                    placeholder="Search medicine by name..."
+                >
+
+                <select id="statusFilter">
+                    <option value="all">All Medicines</option>
+                    <option value="Expired">Expired</option>
+                    <option value="Expiring Soon">Expiring Soon</option>
+                    <option value="Not Expired">Not Expired</option>
+                </select>
+
+                {% if medicines %}
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Medicine</th>
+                                <th>Expiry date</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for medicine in medicines %}
+                            <tr>
+                                <td class="medicine-name">
+                                    {{ medicine.name }}
+                                </td>
+
+                                <td>
+                                    {{ medicine.expiry }}
+                                    {% if medicine.urgent %}
+                                        <span class="urgent-badge">Urgent</span>
+                                    {% endif %}
+                                </td>
+
+                                <td class="stock-number">
+                                    {{ medicine.quantity }}
+                                </td>
+
+                                <td>
+                                    {% if medicine.status == "Expired" %}
+                                        <span class="status expired-status">Expired</span>
+                                    {% elif medicine.status == "Expiring Soon" %}
+                                        <span class="status soon-status">Expiring Soon</span>
+                                    {% else %}
+                                        <span class="status safe-status">Not Expired</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <a href="/edit/{{ medicine.id }}" class="edit-button">Edit</a>
+
+                                    <form
+                                        class="delete-form"
+                                        action="/delete/{{ medicine.id }}"
+                                        method="POST"
+                                    >
+                                        <button type="submit" class="delete-button">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% else %}
+                <div class="empty-state">
+                    <strong>Your cabinet is ready</strong>
+                    No medicines added yet. Use the form to add your first one.
+                </div>
+                {% endif %}
+            </div>
+
+        </section>
+
+        <div class="note">
+            <strong>A helpful reminder:</strong>
+            This website tracks expiry dates but does not send automatic
+            notifications. Always check medicine packaging and ask a pharmacist
+            if you are unsure whether a medicine is safe to use.
+        </div>
+
+    </main>
+
+    <footer>
+        BloomCare · A simple medicine expiry and stock tracking project
+    </footer>
+
+    <script>
+        const searchBox = document.getElementById("medicineSearch");
+        const statusFilter = document.getElementById("statusFilter");
+
+        function filterMedicines() {
+            const searchText = searchBox.value.toLowerCase();
+            const selectedStatus = statusFilter.value;
+            const rows = document.querySelectorAll("#medicine-list tbody tr");
+
+            rows.forEach(function (row) {
+                const medicineName = row.cells[0].textContent.toLowerCase();
+                const medicineStatus = row.cells[3].textContent.trim();
+
+                const matchesName = medicineName.includes(searchText);
+                const matchesStatus =
+                    selectedStatus === "all" ||
+                    medicineStatus === selectedStatus;
+
+                row.style.display =
+                    matchesName && matchesStatus ? "" : "none";
+            });
+        }
+
+        searchBox.addEventListener("input", filterMedicines);
+        statusFilter.addEventListener("change", filterMedicines);
+    </script>
+
+</body>
+</html>

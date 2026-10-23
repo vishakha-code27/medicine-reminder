@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Medicine | BloomCare</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f8f5ef;
+            color: #30243a;
+        }
+
+        .navbar {
+            background: #30243a;
+            color: #fff8ee;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .brand span {
+            color: #f2b49b;
+        }
+
+        .page {
+            max-width: 650px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .panel {
+            background: #fffdf9;
+            padding: 30px;
+            border: 1px solid #eee5dc;
+            border-radius: 20px;
+        }
+
+        .eyebrow {
+            color: #796783;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: #665a68;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ded4df;
+            border-radius: 10px;
+            background: #fffaf5;
+            color: #30243a;
+            font: inherit;
+        }
+
+        input:focus {
+            outline: 2px solid #b9a9c5;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        button, .cancel {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        button {
+            background: #30243a;
+            color: #fff8ee;
+        }
+
+        button:hover {
+            background: #51405d;
+        }
+
+        .cancel {
+            background: #eee5dc;
+            color: #30243a;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #796f79;
+            font-size: 12px;
+        }
+
+        @media (max-width: 520px) {
+            .navbar {
+                padding: 18px 22px;
+            }
+
+            .page {
+                margin-top: 25px;
+            }
+
+            .panel {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="brand">Bloom<span>Care.</span></div>
+    </header>
+
+    <main class="page">
+        <section class="panel">
+            <div class="eyebrow">Medicine cabinet</div>
+            <h1>Edit Medicine</h1>
+            <p class="description">
+                Update the medicine details below and save your changes.
+            </p>
+
+            <form action="{{ url_for('edit_medicine', medicine_id=medicine.id) }}"
+                  method="POST">
+
+                <label for="medicine_name">Medicine name</label>
+                <input
+                    type="text"
+                    id="medicine_name"
+                    name="medicine_name"
+                    value="{{ medicine.name }}"
+                    required
+                >
+
+                <label for="expiry_date">Expiry date</label>
+                <input
+                    type="date"
+                    id="expiry_date"
+                    name="expiry_date"
+                    value="{{ medicine.expiry }}"
+                    required
+                >
+
+                <div class="buttons">
+                    <button type="submit">Save Changes</button>
+                    <a href="/#medicine-list" class="cancel">Cancel</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        BloomCare · A simple medicine expiry and stock tracking project
+    </footer>
+
+</body>
+</html>
